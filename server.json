@@ -1,0 +1,21 @@
+{
+    "name": "APIXU",
+    "docs": "http;//www.bobsplace.com/",
+    "type": "python3",
+    "executable": "apixu.py",
+    "install": "install.sh",
+    "install_cloud": "install_cloud.sh",
+    "description": "Add weather data to the ISY994",
+    "notice": "Powered by Apixu.com",
+    "shortPoll": "120",
+    "longPoll": "600",
+    "profile_version": "1.0.0",
+    "credits": [ {
+	"title": "Apiux: A node server for weather data",
+    	"author": "Bob Paauwe",
+    	"version": "1.0.0",
+    	"date": "April 19, 2019",
+    	"source": "https://github.com/bpaauwe/udi-apixu-poly",
+	"license": "https://github.com/bpaauwe/udi-apixu-poly/LICENSE"
+	} ]
+}
