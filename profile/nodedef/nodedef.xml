@@ -4,7 +4,7 @@
     <sts>
       <st id="ST" editor="bool" />
       <st id="CLITEMP" editor="TEMP_F" />
-      <st id="GV0" editor="TEMP_F" />
+      <st id="GV2" editor="TEMP_F" />
       <st id="CLIHUM" editor="PERCENT" />
       <st id="BARPRES" editor="INHG" />
       <st id="GV4" editor="MPH" />
@@ -35,6 +35,7 @@
       <st id="GV6" editor="ET" />
       <st id="CLIHUM" editor="PERCENT" />
       <st id="GV13" editor="CONDITIONS" />
+      <st id="GV4" editor="MPH" />
       <st id="GV15" editor="MILES" />
       <st id="GV16" editor="UV" />
       <st id="GV20" editor="ET" />

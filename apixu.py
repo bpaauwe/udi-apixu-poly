@@ -161,6 +161,7 @@ class Controller(polyinterface.Controller):
             self.setDriver('GV16', float(jdata['current']['uv']), True, True)
             self.setDriver('GV6', float(jdata['current']['precip_mm']), True, False)
             self.setDriver('GV15', float(jdata['current']['vis_km']), True, False)
+            self.setDriver('GV13', float(jdata['current']['condition']['code']), True, False)
         else:
             self.setDriver('CLITEMP', float(jdata['current']['temp_f']), True, False)
             self.setDriver('BARPRES', float(jdata['current']['pressure_in']), True, False)
@@ -173,6 +174,7 @@ class Controller(polyinterface.Controller):
             self.setDriver('GV16', float(jdata['current']['uv']), True, True)
             self.setDriver('GV6', float(jdata['current']['precip_in']), True, False)
             self.setDriver('GV15', float(jdata['current']['vis_miles']), True, False)
+            self.setDriver('GV13', float(jdata['current']['condition']['code']), True, False)
 
         # last update time:  jdata['last_updated_epoch']
         # condition code: jdata['condition']['code'] ??
@@ -196,19 +198,20 @@ class Controller(polyinterface.Controller):
 
         c = requests.get(request)
         jdata = c.json()
-        LOGGER.debug(jdata)
+        #LOGGER.debug(jdata)
         # Daily data is 7 day forecast, index 0 is today
         for day in range(1,7):
             address = 'forecast_' + str(day)
             forecast = jdata['forecast']['forecastday'][day]
             fcast = {}
 
-            LOGGER.info('** Found forecast for ' + forecast['date'])
+            LOGGER.debug(forecast)
 
             fcast['time'] = forecast['date_epoch']
             fcast['code'] = forecast['day']['condition']['code']
             fcast['avghumidity'] = forecast['day']['avghumidity']
             fcast['uv'] = forecast['day']['uv']
+            LOGGER.info('** Found forecast for %s %d' % (forecast['date'], fcast['code']))
             if self.units == 'metric':
                 fcast['mintemp'] = forecast['day']['mintemp_c']
                 fcast['maxtemp'] = forecast['day']['maxtemp_c']
@@ -222,7 +225,7 @@ class Controller(polyinterface.Controller):
                 fcast['avgvis'] = forecast['day']['avgvis_miles']
                 fcast['maxwind'] = forecast['day']['maxwind_mph']
 
-            self.nodes[address].update_forecast(fcast, jdata['location']['lon'], self.elevation, self.plant_type, self.units)
+            self.nodes[address].update_forecast(fcast, jdata['location']['lat'], self.elevation, self.plant_type, self.units)
         
     def query(self):
         for node in self.nodes:

@@ -20,9 +20,10 @@ class DailyNode(polyinterface.Node):
             {'driver': 'GV19', 'value': 0, 'uom': 25},     # day of week
             {'driver': 'GV0', 'value': 0, 'uom': 4},       # high temp
             {'driver': 'GV1', 'value': 0, 'uom': 4},       # low temp
-            {'driver': 'GV6', 'value': 0, 'uom': 82},     # precip chance
+            {'driver': 'GV6', 'value': 0, 'uom': 24},      # rain
             {'driver': 'CLIHUM', 'value': 0, 'uom': 22},   # humidity
             {'driver': 'GV13', 'value': 0, 'uom': 25},     # conditions
+            {'driver': 'GV4', 'value': 0, 'uom': 49},      # wind speed
             {'driver': 'GV15', 'value': 0, 'uom': 71},     # visability
             {'driver': 'GV16', 'value': 0, 'uom': 71},     # UV index
             {'driver': 'GV20', 'value': 0, 'uom': 106},    # mm/day
@@ -35,13 +36,15 @@ class DailyNode(polyinterface.Node):
                     if driver['driver'] == 'BARPRES': driver['uom'] = 117
                     if driver['driver'] == 'GV0': driver['uom'] = 17
                     if driver['driver'] == 'GV1': driver['uom'] = 17
-                    if driver['driver'] == 'GV6': driver['uom'] = 106
+                    if driver['driver'] == 'GV4': driver['uom'] = 48
+                    if driver['driver'] == 'GV6': driver['uom'] = 105
                     if driver['driver'] == 'GV19': driver['uom'] = 25
                     if driver['driver'] == 'GV15': driver['uom'] = 116
                 elif units == 'metric':
                     if driver['driver'] == 'BARPRES': driver['uom'] = 118
                     if driver['driver'] == 'GV0': driver['uom'] = 4
                     if driver['driver'] == 'GV1': driver['uom'] = 4
+                    if driver['driver'] == 'GV4': driver['uom'] = 49
                     if driver['driver'] == 'GV6': driver['uom'] = 82
                     if driver['driver'] == 'GV19': driver['uom'] = 25
                     if driver['driver'] == 'GV15': driver['uom'] = 38
@@ -51,30 +54,18 @@ class DailyNode(polyinterface.Node):
                     if drv == 'BARPRES': self.drivers[drv]['uom'] = 117
                     if drv == 'GV0': self.drivers[drv]['uom'] = 17
                     if drv == 'GV1': self.drivers[drv]['uom'] = 17
-                    if drv == 'GV6': self.drivers[drv]['uom'] = 106
+                    if drv == 'GV4': self.drivers[drv]['uom'] = 48
+                    if drv == 'GV6': self.drivers[drv]['uom'] = 105
                     if drv == 'GV19': self.drivers[drv]['uom'] = 25
                     if drv == 'GV15': self.drivers[drv]['uom'] = 116
                 elif units == 'metric':
                     if drv == 'BARPRES': self.drivers[drv]['uom'] = 118
                     if drv == 'GV0': self.drivers[drv]['uom'] = 4
                     if drv == 'GV1': self.drivers[drv]['uom'] = 4
+                    if drv == 'GV4': self.drivers[drv]['uom'] = 49
                     if drv == 'GV6': self.drivers[drv]['uom'] = 82
                     if drv == 'GV19': self.drivers[drv]['uom'] = 25
                     if drv == 'GV15': self.drivers[drv]['uom'] = 38
-
-    def icon_2_int(self, icn):
-        return {
-                'clear-day': 0,
-                'clear-night': 1,
-                'rain': 2,
-                'snow': 3,
-                'sleet': 4,
-                'wind': 5,
-                'fog': 6,
-                'cloudy': 7,
-                'partly-cloudy-day': 8,
-                'partly-cloudy-night': 9,
-                }.get(icn, 0)
 
     def mm2inch(self, mm):
         return mm/25.4
@@ -86,9 +77,10 @@ class DailyNode(polyinterface.Node):
         self.setDriver('CLIHUM', round(float(jdata['avghumidity']), 0), True, False)
         self.setDriver('GV0', float(jdata['maxtemp']), True, False)
         self.setDriver('GV1', float(jdata['mintemp']), True, False)
-        #self.setDriver('GV13', self.icon_2_int(jdata['code']), True, False)
+        self.setDriver('GV13', jdata['code'], True, False)
         self.setDriver('GV16', float(jdata['uv']), True, False)
         self.setDriver('GV6', float(jdata['totalprecip']), True, False)
+        self.setDriver('GV4', float(jdata['maxwind']), True, False)
         self.setDriver('GV15', float(jdata['avgvis']), True, False)
         self.setDriver('GV19', int(dow), True, False)
 

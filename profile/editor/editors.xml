@@ -39,7 +39,7 @@
         <range uom="27" min="0" max="200000" prec="0" />
     </editor>
     <editor id="CONDITIONS">
-        <range uom="25" subset="200,804" nls="EN_CCCONDITION" />
+        <range uom="25" subset="1000,1282" nls="EN_DAY_CONDITION" />
     </editor>
     <editor id="INTENSITY">
         <range uom="70" min="0" max="100" prec="0" />
