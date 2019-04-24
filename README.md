@@ -48,5 +48,5 @@ The Apixu.com nodeserver keeps track of the version number and when a profile re
 
 # Release Notes
 
-- 1.0.0 04/xx/2019
+- 1.0.0 04/24/2019
    - Added to the node server store

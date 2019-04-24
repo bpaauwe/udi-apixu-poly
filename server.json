@@ -14,7 +14,7 @@
 	"title": "Apiux: A node server for weather data",
     	"author": "Bob Paauwe",
     	"version": "1.0.0",
-    	"date": "April 19, 2019",
+    	"date": "April 24, 2019",
     	"source": "https://github.com/bpaauwe/udi-apixu-poly",
 	"license": "https://github.com/bpaauwe/udi-apixu-poly/LICENSE"
 	} ]
