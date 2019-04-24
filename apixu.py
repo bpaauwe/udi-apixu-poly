@@ -101,14 +101,14 @@ class Controller(polyinterface.Controller):
         LOGGER.info('Node server started')
 
         # Do an initial query to get the data filled in as soon as possible
-        self.query_conditions()
-        self.query_forecast()
+        self.query_conditions(True)
+        self.query_forecast(True)
 
     def shortPoll(self):
-        self.query_conditions()
+        self.query_conditions(False)
 
     def longPoll(self):
-        self.query_forecast()
+        self.query_forecast(False)
 
     def icon_2_int(self, icn):
         return {
@@ -124,7 +124,7 @@ class Controller(polyinterface.Controller):
                 'partly-cloudy-night': 9,
                 }.get(icn, 0)
 
-    def query_conditions(self):
+    def query_conditions(self, force):
         # Query for the current conditions. We can do this fairly
         # frequently, probably as often as once every 2 minutes.
         #
@@ -150,31 +150,31 @@ class Controller(polyinterface.Controller):
         # All data is available in both metric and imperial so the self.units
         # setting will determine which bit of data to use.
         if self.units == 'metric':
-            self.setDriver('CLITEMP', float(jdata['current']['temp_c']), True, False)
-            self.setDriver('BARPRES', float(jdata['current']['pressure_mb']), True, False)
-            self.setDriver('CLIHUM', float(jdata['current']['humidity']), True, False)
-            self.setDriver('GV4', float(jdata['current']['wind_kph']), True, False)
-            self.setDriver('GV5', float(jdata['current']['gust_kph']), True, False)
-            self.setDriver('WINDDIR', float(jdata['current']['wind_degree']), True, False)
-            self.setDriver('GV14', float(jdata['current']['cloud']), True, False)
-            self.setDriver('GV0', float(jdata['current']['feelslike_c']), True, False)
+            self.setDriver('CLITEMP', float(jdata['current']['temp_c']), True, force)
+            self.setDriver('BARPRES', float(jdata['current']['pressure_mb']), True, force)
+            self.setDriver('CLIHUM', float(jdata['current']['humidity']), True, force)
+            self.setDriver('GV4', float(jdata['current']['wind_kph']), True, force)
+            self.setDriver('GV5', float(jdata['current']['gust_kph']), True, force)
+            self.setDriver('WINDDIR', float(jdata['current']['wind_degree']), True, force)
+            self.setDriver('GV14', float(jdata['current']['cloud']), True, force)
+            self.setDriver('GV2', float(jdata['current']['feelslike_c']), True, force)
             self.setDriver('GV16', float(jdata['current']['uv']), True, True)
-            self.setDriver('GV6', float(jdata['current']['precip_mm']), True, False)
-            self.setDriver('GV15', float(jdata['current']['vis_km']), True, False)
-            self.setDriver('GV13', float(jdata['current']['condition']['code']), True, False)
+            self.setDriver('GV6', float(jdata['current']['precip_mm']), True, force)
+            self.setDriver('GV15', float(jdata['current']['vis_km']), True, force)
+            self.setDriver('GV13', float(jdata['current']['condition']['code']), True, force)
         else:
-            self.setDriver('CLITEMP', float(jdata['current']['temp_f']), True, False)
-            self.setDriver('BARPRES', float(jdata['current']['pressure_in']), True, False)
-            self.setDriver('CLIHUM', float(jdata['current']['humidity']), True, False)
-            self.setDriver('GV4', float(jdata['current']['wind_mph']), True, False)
-            self.setDriver('GV5', float(jdata['current']['gust_mph']), True, False)
-            self.setDriver('WINDDIR', float(jdata['current']['wind_degree']), True, False)
-            self.setDriver('GV14', float(jdata['current']['cloud']), True, False)
-            self.setDriver('GV0', float(jdata['current']['feelslike_f']), True, False)
+            self.setDriver('CLITEMP', float(jdata['current']['temp_f']), True, force)
+            self.setDriver('BARPRES', float(jdata['current']['pressure_in']), True, force)
+            self.setDriver('CLIHUM', float(jdata['current']['humidity']), True, force)
+            self.setDriver('GV4', float(jdata['current']['wind_mph']), True, force)
+            self.setDriver('GV5', float(jdata['current']['gust_mph']), True, force)
+            self.setDriver('WINDDIR', float(jdata['current']['wind_degree']), True, force)
+            self.setDriver('GV14', float(jdata['current']['cloud']), True, force)
+            self.setDriver('GV2', float(jdata['current']['feelslike_f']), True, force)
             self.setDriver('GV16', float(jdata['current']['uv']), True, True)
-            self.setDriver('GV6', float(jdata['current']['precip_in']), True, False)
-            self.setDriver('GV15', float(jdata['current']['vis_miles']), True, False)
-            self.setDriver('GV13', float(jdata['current']['condition']['code']), True, False)
+            self.setDriver('GV6', float(jdata['current']['precip_in']), True, force)
+            self.setDriver('GV15', float(jdata['current']['vis_miles']), True, force)
+            self.setDriver('GV13', float(jdata['current']['condition']['code']), True, force)
 
         # last update time:  jdata['last_updated_epoch']
         # condition code: jdata['condition']['code'] ??
@@ -182,7 +182,7 @@ class Controller(polyinterface.Controller):
 
         # is there a location object with lat and lon we can use?
 
-    def query_forecast(self):
+    def query_forecast(self, force):
         request = 'https://api.apixu.com/v1/forecast.json?'
         request += 'key=' + self.apikey
         request += '&q=' + self.location
